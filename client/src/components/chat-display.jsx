@@ -56,7 +56,7 @@ export function ChatDisplay() {
   const [message, setMessage] = useState('');
   const today = new Date()
   useEffect(() => {
-    if(!chatid || !user.id) return;
+    if(!chatid || !user.user_id) return;
     // console.log(state.chats);
     // const chatt = state.chats.find((item) => item.conversationID === Number(chatid)) || null;
     // console.log(chatt);
@@ -64,7 +64,7 @@ export function ChatDisplay() {
     (async () => {
       try {
         // console.log("2 times/////////////@@##$%")
-        const res = await axios.get(`http://localhost:5000/chats/conversation?conversationId=${chatid}&userId=${user.id}`);
+        const res = await axios.get(`http://localhost:5000/chats/conversation?conversationId=${chatid}&userId=${user.user_id}`);
         console.log(res.data)
         // dispatch({ type: 'SET_MESSAGES', payload: res.data });
         dispatch({ type: 'SELECT_CHAT', payload: res.data[0] });

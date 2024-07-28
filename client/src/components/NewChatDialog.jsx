@@ -71,11 +71,12 @@ function NewChatDialog() {
             }
         };
     }
-    const handleNewChat = (userId, isGroup) => {
+    const handleNewChat = (userid, isGroup) => {
+        // console.log(user);
         async function createConversation() {
             try {
                 setNewChatLoading(true);
-                const res = await axios.post('http://localhost:5000/chats/conversation', { members: [userId], creator: user.id, isGroup: isGroup });
+                const res = await axios.post('http://localhost:5000/chats/conversation', { members: [userid], creator: user.user_id, isGroup: isGroup });
                 console.log(res.data);
                 setTimeout(() => {
                     setNewChatLoading(false);
@@ -123,10 +124,10 @@ function NewChatDialog() {
                 setFetching(true);
                 const res = await axios.get(`http://localhost:5000/chats/users?search=${search}`);
                 console.log(res.data);
-                res.data = res.data.filter((person) => person.id !== user.id);
+                res.data = res.data.filter((person) => person.user_id !== user.user_id);
 
                 console.log(selectedPeople.includes('933130e1-0b5e-44ee-8ac4-7461ab1a8935'));
-                setSearchResults(res.data.map((person) => ({ ...person, checked: selectedPeople.includes(person.id) })));
+                setSearchResults(res.data.map((person) => ({ ...person, checked: selectedPeople.includes(person.user_id) })));
             } catch (error) {
                 console.error(error);
             }
@@ -239,16 +240,16 @@ function NewChatDialog() {
                                     (<DialogDescription className="px-4 py-2 h-40 min-h-52">No users found</DialogDescription>) :
                                     (< ScrollArea className="max-h-96 min-h-52 px-2">
                                         <div className="grid gap-2 py4">
-                                            {searchResults.map((result) => (result.id !== user.id) ? (
+                                            {searchResults.map((result) => (result.user_id !== user.user_id) ? (
 
                                                 <div key={result.id} className="space-x-2 border rounded-lg">
-                                                    <Button variant='ghost' className='flex gap-2 items-center justify-start h-full w-full p-2' onClick={() => handleNewChat(result.id, false)}>
+                                                    <Button variant='ghost' className='flex gap-2 items-center justify-start h-full w-full p-2' onClick={() => handleNewChat(result.user_id, false)}>
                                                         {/* <div className='flex gap-2 items-center'> */}
                                                         <Avatar>
                                                             <AvatarImage src={result.ProfilePicture} alt="@shadcn" />
                                                             <AvatarFallback>CN</AvatarFallback>
                                                         </Avatar>
-                                                        <p>{result.Username}</p>
+                                                        <p>{result.username}</p>
                                                         {/* </div> */}
                                                     </Button>
                                                 </div>
